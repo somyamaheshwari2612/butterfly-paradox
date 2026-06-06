@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useArchiveStore } from './store/archiveStore'
 import { motion } from 'framer-motion'
+import { Analytics } from '@vercel/analytics/react'
 import { playMachineSlumber, playCelestialChime, playMetallicConfirm, playDeepResonance, startReconstructionSequence, stopReconstructionSequence, applyInstability, playGlitchCollapse } from './lib/soundEngine'
 
 // Landing Page
