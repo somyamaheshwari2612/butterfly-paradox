@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useArchiveStore } from './store/archiveStore'
 import { motion } from 'framer-motion'
-import { Analytics } from '@vercel/analytics/react'
 import { playMachineSlumber, playCelestialChime, playMetallicConfirm, playDeepResonance, startReconstructionSequence, stopReconstructionSequence, applyInstability, playGlitchCollapse } from './lib/soundEngine'
-
+import { Analytics } from "@vercel/analytics/next"
 // Landing Page
 const LandingMachine = () => {
   const { initiateReconstruction } = useArchiveStore()
@@ -198,7 +197,7 @@ const ReconstructingMachine = () => {
             <div style={{ fontSize: '2.5rem', fontWeight: 'bold', letterSpacing: '4px', textShadow: '0 0 20px rgba(227,93,106,0.8)', marginBottom: '2rem' }}>
               REALITY STABILIZED
             </div>
-            
+
             {/* Reality Age Tracker */}
             <div style={{ padding: '0.8rem', background: 'rgba(212,175,55,0.05)', borderLeft: '2px solid var(--color-gold)' }}>
               <div style={{ color: 'var(--color-silver)', fontSize: '0.7rem', opacity: 0.7 }}>REALITY AGE</div>
@@ -316,14 +315,14 @@ const MasterTimeline = ({ isCollapsing }) => {
       applyInstability(parseInt(realityData.stability, 10));
     }
   }, [realityData, isCollapsing]);
-  
+
   const events = realityData ? [realityData.divergence, ...realityData.events] : []
   const stabilityInt = realityData ? parseInt(realityData.stability, 10) : 100;
-  
+
   // Calculate dynamic system values
   const coreTemp = Math.floor(42 + (100 - stabilityInt) * 1.5);
   const fluxVal = (1.21 + Math.random() * (100 - stabilityInt) / 50).toFixed(2);
-  
+
   // Reality Corruption Logic (Stage 3)
   useEffect(() => {
     if (stabilityInt < 30 && !isCollapsing) {
@@ -393,13 +392,13 @@ ${realityData.divergence.year} - ${realityData.divergence.title}
   }
 
   return (
-    <motion.div 
-      ref={captureRef} 
+    <motion.div
+      ref={captureRef}
       animate={
-        isCollapsing ? { 
-          x: [0, -30, 30, -20, 20, 0], 
-          y: [0, 15, -15, 10, -10, 0], 
-          opacity: [1, 0.5, 0.8, 0.2, 0], 
+        isCollapsing ? {
+          x: [0, -30, 30, -20, 20, 0],
+          y: [0, 15, -15, 10, -10, 0],
+          opacity: [1, 0.5, 0.8, 0.2, 0],
           scale: [1, 1.05, 0.95, 1.1, 1.5],
           filter: ['hue-rotate(0deg)', 'hue-rotate(250deg) blur(5px) contrast(200%)', 'hue-rotate(300deg) blur(10px) invert(100%)', 'blur(20px)']
         } : screenGlitch ? {
@@ -435,44 +434,44 @@ ${realityData.divergence.year} - ${realityData.divergence.title}
           const isGlitching = glitchTitle === i;
           const displayYear = stabilityInt < 60 && Math.random() > 0.8 ? `${ev.year}?` : ev.year;
           const displayTitle = isGlitching ? ev.title.split('').reverse().join('') : ev.title;
-          
+
           return (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="glass-panel timeline-node-card"
-                style={{ 
-                  position: 'relative', 
-                  minWidth: '450px',
-                  maxWidth: '450px',
-                  height: '100%',
-                  overflowY: 'auto',
-                  marginRight: '150px',
-                  paddingLeft: '3rem',
-                  paddingBottom: '1rem'
-                }}
-              >
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+              className="glass-panel timeline-node-card"
+              style={{
+                position: 'relative',
+                minWidth: '450px',
+                maxWidth: '450px',
+                height: '100%',
+                overflowY: 'auto',
+                marginRight: '150px',
+                paddingLeft: '3rem',
+                paddingBottom: '1rem'
+              }}
+            >
               {/* Timeline Node Dot */}
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.5, background: 'var(--color-gold)', boxShadow: '0 0 30px var(--color-gold)' }}
                 onMouseEnter={() => { playCelestialChime() }}
-                style={{ 
-                  position: 'absolute', 
-                  left: '-75px', 
-                  top: '50%', 
-                  width: '12px', 
-                  height: '12px', 
+                style={{
+                  position: 'absolute',
+                  left: '-75px',
+                  top: '50%',
+                  width: '12px',
+                  height: '12px',
                   background: stabilityInt < 20 ? 'var(--color-purple)' : ev.type === 'divergence' ? 'var(--color-gold)' : 'var(--color-silver)',
-                  borderRadius: '50%', 
+                  borderRadius: '50%',
                   transform: 'translateY(-50%)',
                   boxShadow: stabilityInt < 20 ? '0 0 20px var(--color-purple)' : `0 0 20px ${ev.type === 'divergence' ? 'var(--color-gold)' : 'var(--color-silver)'}`,
-                  zIndex: 2 
+                  zIndex: 2
                 }}
               />
-              
+
               {/* Connector line to node */}
               <div style={{
                 position: 'absolute',
@@ -483,11 +482,11 @@ ${realityData.divergence.year} - ${realityData.divergence.title}
                 background: stabilityInt < 20 ? 'rgba(138,43,226,0.5)' : 'rgba(255,255,255,0.1)',
                 transform: 'translateY(-50%)'
               }} />
-              
-              <div style={{ 
-                background: 'rgba(255,255,255,0.02)', 
-                border: stabilityInt < 20 ? '1px solid rgba(175, 55, 212, 0.2)' : '1px solid rgba(255,255,255,0.05)', 
-                padding: '2rem', 
+
+              <div style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: stabilityInt < 20 ? '1px solid rgba(175, 55, 212, 0.2)' : '1px solid rgba(255,255,255,0.05)',
+                padding: '2rem',
                 backdropFilter: 'blur(20px)',
                 filter: stabilityInt < 20 ? 'sepia(0.5) hue-rotate(250deg)' : 'none'
               }}>
@@ -500,10 +499,10 @@ ${realityData.divergence.year} - ${realityData.divergence.title}
                 <p style={{ color: 'var(--color-silver)', lineHeight: '1.8' }}>
                   {ev.desc}
                 </p>
-                
+
                 {ev.type !== 'divergence' && stabilityInt > 0 && (
-                  <button 
-                    className="btn-alter" 
+                  <button
+                    className="btn-alter"
                     onClick={() => { playMetallicConfirm(); enterEra({ year: displayYear, title: displayTitle, desc: ev.desc }); }}
                     style={{ marginTop: '1.5rem', fontSize: '0.8rem', padding: '0.5rem 1.5rem' }}
                   >
@@ -517,13 +516,13 @@ ${realityData.divergence.year} - ${realityData.divergence.title}
 
         {/* EXTEND REALITY BUTTON */}
         <div style={{ display: 'flex', alignItems: 'center', height: '100%', paddingRight: '20vw', marginLeft: '50px' }}>
-          <button 
-            className="btn-alter" 
+          <button
+            className="btn-alter"
             onClick={() => { playMetallicConfirm(); extendTimeline(); }}
             disabled={isExtending}
-            style={{ 
-              padding: '1.5rem 3rem', 
-              fontSize: '1.2rem', 
+            style={{
+              padding: '1.5rem 3rem',
+              fontSize: '1.2rem',
               background: isExtending ? 'rgba(255,255,255,0.05)' : 'rgba(212, 175, 55, 0.1)',
               borderColor: 'var(--color-gold)',
               color: 'var(--color-gold)',
@@ -743,8 +742,8 @@ const EraDive = () => {
                 <div style={{ color: 'rgba(255,255,255,0.3)', fontStyle: 'italic', textAlign: 'center', marginTop: '2rem' }}>Establish connection...</div>
               )}
               {chatHistory.map((m, i) => (
-                <div key={i} style={{ 
-                  marginBottom: '1.5rem', 
+                <div key={i} style={{
+                  marginBottom: '1.5rem',
                   color: m.role === 'Archivist' ? 'var(--color-gold)' : 'var(--color-silver)',
                   fontFamily: m.role === 'Archivist' ? 'var(--font-sans)' : 'var(--font-serif)',
                   fontStyle: m.role === 'Archivist' ? 'normal' : 'italic',
@@ -859,10 +858,10 @@ const TimelineCollapse = () => {
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#020005', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      
+
       {/* Dissolving Violet Mist */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(138, 43, 226, 0.1) 0%, transparent 70%)', pointerEvents: 'none' }} />
-      
+
       <motion.div
         initial={{ opacity: 0, scale: 1.1 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -879,8 +878,8 @@ const TimelineCollapse = () => {
           ARCHIVE RECORD CORRUPTED BEYOND RECOVERY.
         </p>
 
-        <button 
-          className="btn-alter" 
+        <button
+          className="btn-alter"
           onClick={() => { setAppState('ARCHIVE_STANDBY'); window.location.reload(); }}
           style={{ marginTop: '5rem', borderColor: 'var(--color-purple)', color: 'var(--color-purple)', background: 'rgba(138, 43, 226, 0.05)' }}
         >
@@ -889,7 +888,7 @@ const TimelineCollapse = () => {
       </motion.div>
 
       {/* Floating disconnected nodes */}
-      {Array.from({length: 20}).map((_, i) => (
+      {Array.from({ length: 20 }).map((_, i) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, y: 0, x: (Math.random() - 0.5) * 800 }}
@@ -1002,6 +1001,7 @@ function App() {
         <div>Cataloguing Impossible Histories</div>
         <div style={{ marginTop: '0.2rem' }}>A Temporal Experiment by <span style={{ color: 'var(--color-gold)', fontWeight: 'bold' }}>Somya Maheshwari</span></div>
       </div>
+      <Analytics mode="production" />
     </div>
   )
 }
