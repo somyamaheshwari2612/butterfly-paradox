@@ -2,7 +2,8 @@ let audioCtx = null;
 let machineHumOsc = null;
 let machineHumGain = null;
 let bwooomTimer = null;
-let isMachineSlumbering = false;
+export let isMachineSlumbering = false;
+export let isMuted = false;
 
 // Audio context nodes for global effects
 let masterConvolver = null;
@@ -25,12 +26,25 @@ function initCtx() {
     globalDelayFeedback.gain.value = 0; // 0 by default, increases with instability
 
     globalDelay.connect(globalDelayFeedback);
+    globalDelay.connect(globalDelayFeedback);
     globalDelayFeedback.connect(globalDelay);
     globalDelay.connect(audioCtx.destination);
   }
-  if (audioCtx.state === 'suspended') {
+  if (audioCtx.state === 'suspended' && !isMuted) {
     audioCtx.resume();
   }
+}
+
+export async function toggleMute() {
+  if (!audioCtx) initCtx();
+  if (audioCtx.state === 'running') {
+    await audioCtx.suspend();
+    isMuted = true;
+  } else if (audioCtx.state === 'suspended') {
+    await audioCtx.resume();
+    isMuted = false;
+  }
+  return isMuted;
 }
 
 // ==========================================

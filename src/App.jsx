@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useArchiveStore } from './store/archiveStore'
 import { motion } from 'framer-motion'
-import { playMachineSlumber, playCelestialChime, playMetallicConfirm, playDeepResonance, startReconstructionSequence, stopReconstructionSequence, applyInstability, playGlitchCollapse } from './lib/soundEngine'
-import { Analytics } from "@vercel/analytics/next"
+import { Volume2, VolumeX } from 'lucide-react'
+import { playMachineSlumber, playCelestialChime, playMetallicConfirm, playDeepResonance, startReconstructionSequence, stopReconstructionSequence, applyInstability, playGlitchCollapse, toggleMute } from './lib/soundEngine'
+import { Analytics } from "@vercel/analytics/react"
 // Landing Page
 const LandingMachine = () => {
   const { initiateReconstruction } = useArchiveStore()
   const [query, setQuery] = useState('')
+  const [isMuted, setIsMuted] = useState(false)
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && query.trim()) {
@@ -600,7 +602,7 @@ ${realityData.divergence.year} - ${realityData.divergence.title}
       )}
 
       {/* Alter History global button floats at top right */}
-      <div style={{ position: 'fixed', top: 30, right: 40, zIndex: 100, display: 'flex', gap: '1rem' }}>
+      <div style={{ position: 'fixed', top: 30, right: 40, zIndex: 100, display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <button className="btn-alter" onClick={() => { playMetallicConfirm(); handleExport(); }} style={{ background: 'rgba(0, 229, 255, 0.1)', borderColor: 'rgba(0, 229, 255, 0.3)', color: '#00e5ff' }}>
           EXPORT REALITY
         </button>
@@ -911,6 +913,12 @@ const TimelineCollapse = () => {
 
 function App() {
   const { appState } = useArchiveStore()
+  const [isMuted, setIsMuted] = useState(false);
+
+  const handleMuteToggle = async () => {
+    const muted = await toggleMute();
+    setIsMuted(muted);
+  };
 
   return (
     <div
@@ -1001,6 +1009,20 @@ function App() {
         <div>Cataloguing Impossible Histories</div>
         <div style={{ marginTop: '0.2rem' }}>A Temporal Experiment by <span style={{ color: 'var(--color-gold)', fontWeight: 'bold' }}>Somya Maheshwari</span></div>
       </div>
+
+      {/* Global Mute Button */}
+      <div style={{ position: 'fixed', top: 30, left: 40, zIndex: 100 }}>
+        <button
+          onClick={handleMuteToggle}
+          style={{ background: 'rgba(255,215,0,0.05)', border: '1px solid rgba(255,215,0,0.2)', borderRadius: '50%', width: '40px', height: '40px', color: 'var(--color-gold)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s ease', boxShadow: '0 0 10px rgba(212,175,55,0.1)' }}
+          title={isMuted ? "Unmute Audio" : "Mute Audio"}
+          onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,215,0,0.15)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(212,175,55,0.3)'; }}
+          onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,215,0,0.05)'; e.currentTarget.style.boxShadow = '0 0 10px rgba(212,175,55,0.1)'; }}
+        >
+          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </button>
+      </div>
+
       <Analytics mode="production" />
     </div>
   )
