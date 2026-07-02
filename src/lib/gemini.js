@@ -62,7 +62,7 @@ Focus on awe, mystery, and dramatic consequences. Make the events sound like cla
     console.warn("Groq failed, falling back to Gemini:", error);
     
     const model = ai.getGenerativeModel({
-      model: 'gemini-1.5-flash-latest',
+      model: 'gemini-3.1-flash-lite',
       generationConfig: { responseMimeType: "application/json" }
     });
     
@@ -109,7 +109,7 @@ ${figureName}:`;
   } catch (error) {
     console.warn("Groq Chat Error, falling back to Gemini:", error);
     try {
-      const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+      const model = ai.getGenerativeModel({ model: 'gemini-3.1-flash-lite' });
       const result = await model.generateContent(prompt);
       return result.response.text().trim();
     } catch (fallbackError) {
@@ -182,7 +182,7 @@ Make the events sound like classified historical records. Focus on awe, mystery,
     
     const ai = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
     const model = ai.getGenerativeModel({
-      model: 'gemini-1.5-flash-latest',
+      model: 'gemini-3.1-flash-lite',
       generationConfig: { responseMimeType: "application/json" }
     });
     
@@ -257,7 +257,7 @@ Output MUST be in raw JSON format, exactly matching this structure:
     console.warn("Groq Rewrite Failed, falling back to Gemini:", error);
     
     const model = ai.getGenerativeModel({
-      model: 'gemini-1.5-flash-latest',
+      model: 'gemini-3.1-flash-lite',
       generationConfig: { responseMimeType: "application/json" }
     });
     
