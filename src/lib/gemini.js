@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const ai = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+const ai2 = import.meta.env.VITE_GEMINI_API_KEY_2 ? new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY_2) : null;
 
 export async function generateReality(query) {
   const prompt = `
@@ -38,28 +39,19 @@ Focus on awe, mystery, and dramatic consequences. Make the events sound like cla
   `;
 
   try {
-    const groqKey = import.meta.env.VITE_GROQ_API_KEY;
-    if (!groqKey) throw new Error("No Groq key provided.");
+    if (!ai2) throw new Error("No primary Gemini key provided.");
     
-    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${groqKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'system', content: 'You are an AI that outputs pure JSON only.' }, { role: 'user', content: prompt }]
-      })
+    const model = ai2.getGenerativeModel({
+      model: 'gemini-3.1-flash-lite',
+      generationConfig: { responseMimeType: "application/json" }
     });
     
-    if (!groqRes.ok) throw new Error(`Groq failed: ${groqRes.statusText}`);
-    const groqData = await groqRes.json();
-    let text = groqData.choices[0].message.content;
+    const result = await model.generateContent(prompt);
+    let text = result.response.text();
     text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     return JSON.parse(text);
   } catch (error) {
-    console.warn("Groq failed, falling back to Gemini:", error);
+    console.warn("Primary Gemini failed, falling back to secondary Gemini:", error);
     
     const model = ai.getGenerativeModel({
       model: 'gemini-3.1-flash-lite',
@@ -89,25 +81,13 @@ Archivist: ${userMessage}
 ${figureName}:`;
 
   try {
-    const groqKey = import.meta.env.VITE_GROQ_API_KEY;
-    if (!groqKey) throw new Error("No Groq key");
+    if (!ai2) throw new Error("No primary Gemini key provided.");
     
-    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${groqKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    if (!groqRes.ok) throw new Error("Groq failed");
-    const groqData = await groqRes.json();
-    return groqData.choices[0].message.content.trim();
+    const model = ai2.getGenerativeModel({ model: 'gemini-3.1-flash-lite' });
+    const result = await model.generateContent(prompt);
+    return result.response.text().trim();
   } catch (error) {
-    console.warn("Groq Chat Error, falling back to Gemini:", error);
+    console.warn("Primary Gemini Chat Error, falling back to secondary Gemini:", error);
     try {
       const model = ai.getGenerativeModel({ model: 'gemini-3.1-flash-lite' });
       const result = await model.generateContent(prompt);
@@ -157,28 +137,19 @@ Make the events sound like classified historical records. Focus on awe, mystery,
   `;
 
   try {
-    const groqKey = import.meta.env.VITE_GROQ_API_KEY;
-    if (!groqKey) throw new Error("No Groq key provided.");
+    if (!ai2) throw new Error("No primary Gemini key provided.");
     
-    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${groqKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'system', content: 'You are an AI that outputs pure JSON only.' }, { role: 'user', content: prompt }]
-      })
+    const model = ai2.getGenerativeModel({
+      model: 'gemini-3.1-flash-lite',
+      generationConfig: { responseMimeType: "application/json" }
     });
     
-    if (!groqRes.ok) throw new Error(`Groq failed: ${groqRes.statusText}`);
-    const groqData = await groqRes.json();
-    let text = groqData.choices[0].message.content;
+    const result = await model.generateContent(prompt);
+    let text = result.response.text();
     text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     return JSON.parse(text);
   } catch (error) {
-    console.warn("Groq failed, falling back to Gemini:", error);
+    console.warn("Primary Gemini failed, falling back to secondary Gemini:", error);
     
     const ai = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
     const model = ai.getGenerativeModel({
@@ -233,28 +204,19 @@ Output MUST be in raw JSON format, exactly matching this structure:
   `;
 
   try {
-    const groqKey = import.meta.env.VITE_GROQ_API_KEY;
-    if (!groqKey) throw new Error("No Groq key provided.");
+    if (!ai2) throw new Error("No primary Gemini key provided.");
     
-    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${groqKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'system', content: 'You are an AI that outputs pure JSON only.' }, { role: 'user', content: prompt }]
-      })
+    const model = ai2.getGenerativeModel({
+      model: 'gemini-3.1-flash-lite',
+      generationConfig: { responseMimeType: "application/json" }
     });
     
-    if (!groqRes.ok) throw new Error(`Groq failed: ${groqRes.statusText}`);
-    const groqData = await groqRes.json();
-    let text = groqData.choices[0].message.content;
+    const result = await model.generateContent(prompt);
+    let text = result.response.text();
     text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     return JSON.parse(text);
   } catch (error) {
-    console.warn("Groq Rewrite Failed, falling back to Gemini:", error);
+    console.warn("Primary Gemini Rewrite Failed, falling back to secondary Gemini:", error);
     
     const model = ai.getGenerativeModel({
       model: 'gemini-3.1-flash-lite',
